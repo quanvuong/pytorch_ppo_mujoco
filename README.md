@@ -1,4 +1,4 @@
-An implementation of PPO in Pytorch that achieves similar performance to the official implementation by OpenAI for the mujoco environments. I explained the implementation details [here](https://drive.google.com/file/d/1mjLKiPya9qSH9WuIO769fFGxgaTZT_qK/view?usp=sharing).
+An implementation of PPO in Pytorch that achieves similar performance to the official implementation by OpenAI for the mujoco environments. I explained the implementation details [here](https://drive.google.com/file/d/1mjLKiPya9qSH9WuIO769fFGxgaTZT_qK/view?usp=sharing). I used the same hyperparameters as OpenAI's implementation to ensure apple-to-apple comparison.
 
 ![](https://github.com/quanvuong/pytorch_ppo_mujoco/blob/master/images/Comparison_for_HalfCheetah-v2.png)
 
