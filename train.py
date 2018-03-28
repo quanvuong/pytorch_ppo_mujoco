@@ -79,8 +79,7 @@ def one_train_iter(pol, old_pol, val, optims,
     # Sync params
     old_pol.load_state_dict(pol.state_dict())
 
-    # Initialize running stats for state for state normalization purposes
-    # Taken from https://dsp.stackexchange.com/questions/811/determining-the-mean-and-standard-deviation-in-real-time
+    # Obtain training batch
     seg = seg_gen.__next__()
 
     eps_rets_buff.extend(seg['ep_rets'])

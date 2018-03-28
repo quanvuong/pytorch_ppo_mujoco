@@ -26,6 +26,7 @@ def main():
     args = get_args_parser().parse_args()
     env = make_mujoco_env(args.env, args.seed)
 
+    # Construct policy and value network
     pol = Policy(env.observation_space, env.action_space, args)
     pol_optim = optim.Adam(pol.parameters(), lr=args.optim_stepsize, eps=args.adam_epsilon)
 
@@ -44,10 +45,13 @@ def main():
 
     start = time.time()
 
+    # Buffer for running statistics
     eps_rets_buff = deque(maxlen=100)
     eps_rets_mean_buff = []
 
     state_running_m_std = RunningMeanStd(shape=env.observation_space.shape)
+
+    # seg_gen is a generator that yields the training data points
     seg_gen = traj_seg_gen(env, pol, val, state_running_m_std, args)
 
     for iter_i in range(num_train_iter):

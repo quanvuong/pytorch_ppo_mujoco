@@ -19,7 +19,7 @@ def FloatTensorVar(x, requires_grad=False):
 
 
 def FloatTensorFromNumpyVar(x, requires_grad=False):
-    return Variable(FloatTensorFromNumpy(x), requires_grad)
+    return Variable(FloatTensorFromNumpy(x), requires_grad=requires_grad)
 
 
 def ByteTensorVar(x):

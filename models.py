@@ -1,10 +1,7 @@
 from utils import weights_init
-from wrappers import FloatTensorFromNumpyVar
 
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
-from torch.distributions import Normal
 import torch.nn.functional as F
 
 import numpy as np
