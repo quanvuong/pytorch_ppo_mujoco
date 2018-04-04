@@ -40,9 +40,13 @@ class Policy(nn.Module):
 
         ac_size = acs.size()[-1]
 
+        sum_logstd = torch.sum(torch.log(self.std), dim=-1)
+        if sum_logstd.data[0] != sum_logstd.data[0]:
+            sum_logstd = 0.0
+
         return 0.5 * torch.sum(((acs - mean) / self.std)**2, dim=-1, keepdim=True) + \
                0.5 * np.log(2.0 * np.pi) * float(ac_size) + \
-               torch.sum(torch.log(self.std), dim=-1)
+               sum_logstd
 
     def logp(self, state, ac, args):
         return - self.neglogp(state, ac, args)
