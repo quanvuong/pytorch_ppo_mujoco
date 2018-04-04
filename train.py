@@ -6,6 +6,10 @@ import torch.nn.functional as F
 import numpy as np
 
 
+def c_nonzero(var):
+    return np.count_nonzero(var.data.numpy())
+
+
 def update_params(m_b, pol, val, optims, args):
 
     keys = ('obs', 'acs', 'vtargs', 'atargs', 'pold')
@@ -22,8 +26,13 @@ def update_params(m_b, pol, val, optims, args):
     # Detach m_advs for surr loss so we don't have to backwards pass through those.
     surr1 = ratio * atargs
     surr2 = torch.clamp(ratio, 1.0 - args.clip_param_annealed, 1.0 + args.clip_param_annealed) * atargs
-    pol_surr, _ = torch.min(torch.cat((surr1, surr2), dim=1), dim=1)
-    pol_surr = - torch.sum(pol_surr) / obs.size()[0]
+
+    mask = (surr1 > surr2).detach()
+
+    if c_nonzero(mask) > 0:
+        surr1[mask] = 0.0
+
+    pol_surr = - torch.sum(surr1) / obs.size()[0]
 
     # Calculate value function loss
     val_loss = F.mse_loss(val(obs), vtargs)
