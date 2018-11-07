@@ -84,11 +84,9 @@ def one_train_iter(pol, old_pol, val, optims,
 
     eps_rets_buff.extend(seg['ep_rets'])
     eps_rets_mean_buff.append((num_ts_so_far, np.mean(eps_rets_buff)))
-    print('Last 100 episodes mean rets', np.mean(eps_rets_buff))
-    print('Finished getting batch data')
+    print('Last 100 episodes mean returns:', np.mean(eps_rets_buff))
 
     add_vtarg_and_adv(seg, args)
-    print('Finished calculating advantages and td lambda return')
 
     seg['advs'] = (seg['advs'] - seg['advs'].mean()) / seg['advs'].std()
     pold = old_pol.prob(FloatTensorFromNumpyVar(seg['obs']), FloatTensorFromNumpyVar(seg['acs']), args).data.numpy()

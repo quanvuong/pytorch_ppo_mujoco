@@ -54,18 +54,11 @@ def main():
                        iter_i, eps_rets_buff, eps_rets_mean_buff, seg_gen,
                        state_running_m_std,
                        args)
-        print('Finished training iter', iter_i, ' Taken: ', round(time.time() - start, 3), ' seconds so far')
-
-        if args.timer_code and iter_i == TIMER_NUM_ITER:
-            break
-
-    if args.timer_code:
-        print('Will take ', ((time.time() - start) * num_train_iter / TIMER_NUM_ITER) / (60 * 60),
-              'hours to finish training ', args.max_timesteps, ' timesteps')
+        print(f'Taken: {round(time.time() - start, 3)} seconds so far')
 
     file_prefix = args.env + '_eps_rets_mean_buff_' + args.new_config
 
-    with open(file_prefix + '.pickled', 'wb+') as f:
+    with open(file_prefix + '.pkl', 'wb+') as f:
         pickle.dump(eps_rets_mean_buff, f)
 
         x = [i[0] for i in eps_rets_mean_buff]
