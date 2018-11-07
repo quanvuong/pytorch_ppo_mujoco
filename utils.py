@@ -1,4 +1,5 @@
 import argparse
+import os
 
 import torch
 import numpy as np
@@ -17,6 +18,16 @@ def set_global_seeds(seed):
 
     np.random.seed(seed)
     random.seed(0)
+
+
+def set_torch_num_threads():
+
+    try:
+        nt = int(os.environ['OMP_NUM_THREADS'])
+        torch.set_num_threads(nt)
+    except KeyError:
+        torch.set_num_threads(1)
+
 
 
 def get_args_parser():

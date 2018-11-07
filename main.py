@@ -1,11 +1,9 @@
-from utils import get_args_parser, make_mujoco_env, traj_seg_gen, RunningMeanStd
+from utils import get_args_parser, make_mujoco_env, traj_seg_gen, RunningMeanStd, set_torch_num_threads
 from models import Policy, ValueNet
 from train import one_train_iter
 
-import torch
 import torch.optim as optim
 
-import os
 import time
 from collections import deque
 import pickle
@@ -17,11 +15,7 @@ TIMER_NUM_ITER = 1
 
 def main():
 
-    try:
-        nt = int(os.environ['OMP_NUM_THREADS'])
-        torch.set_num_threads(nt)
-    except KeyError:
-        torch.set_num_threads(1)
+    set_torch_num_threads()
 
     args = get_args_parser().parse_args()
     env = make_mujoco_env(args.env, args.seed)
