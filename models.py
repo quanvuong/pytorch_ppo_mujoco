@@ -26,8 +26,8 @@ class Policy(nn.Module):
 
     def forward(self, x, args):
 
-        x = F.tanh(self.l_in(x))
-        x = F.tanh(self.l1(x))
+        x = torch.tanh(self.l_in(x))
+        x = torch.tanh(self.l1(x))
         mean = self.l_out(x)
 
         ac = torch.normal(mean, self.std.expand(mean.shape[0], -1))
@@ -66,8 +66,8 @@ class ValueNet(nn.Module):
 
     def forward(self, x):
 
-        x = F.tanh(self.l_in(x))
-        x = F.tanh(self.l1(x))
+        x = torch.tanh(self.l_in(x))
+        x = torch.tanh(self.l1(x))
         x = self.l_out(x)
 
         return x
