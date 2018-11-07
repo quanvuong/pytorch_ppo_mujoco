@@ -1,4 +1,4 @@
-from utils import get_args_parser, make_mujoco_env, traj_seg_gen, RunningMeanStd, weights_init
+from utils import get_args_parser, make_mujoco_env, traj_seg_gen, RunningMeanStd
 from models import Policy, ValueNet
 from train import one_train_iter
 
