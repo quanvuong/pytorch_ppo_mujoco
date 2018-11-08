@@ -81,8 +81,6 @@ def traj_seg_gen(env, pol, val, state_running_m_std, args):
     acs = np.array([ac for _ in range(args.ts_per_batch)])
 
     while True:
-        prevac = ac
-
         ob = np.clip((ob - state_running_m_std.mean) / state_running_m_std.std, -5.0, 5.0)
         t_state = FloatTensorFromNumpyVar(np.expand_dims(ob, 0), requires_grad=False)
 
