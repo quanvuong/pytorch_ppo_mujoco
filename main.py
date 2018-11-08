@@ -9,8 +9,7 @@ from collections import deque
 import pickle
 
 import matplotlib.pyplot as plt
-
-TIMER_NUM_ITER = 1
+from tqdm import trange
 
 
 def main():
@@ -19,6 +18,8 @@ def main():
 
     args = get_args_parser().parse_args()
     env = make_mujoco_env(args.env, args.seed)
+
+    print(f'args: {args}\n')
 
     # Construct policy and value network
     pol = Policy(env.observation_space, env.action_space, args)
@@ -48,15 +49,17 @@ def main():
     # seg_gen is a generator that yields the training data points
     seg_gen = traj_seg_gen(env, pol, val, state_running_m_std, args)
 
-    for iter_i in range(num_train_iter):
+    for iter_i in trange(num_train_iter):
         print('\nStarting training iter', iter_i)
         one_train_iter(pol, old_pol, val, optims,
                        iter_i, eps_rets_buff, eps_rets_mean_buff, seg_gen,
                        state_running_m_std,
                        args)
         print(f'Taken: {round(time.time() - start, 3)} seconds so far')
+        print()
 
-    file_prefix = args.env + '_eps_rets_mean_buff_' + args.new_config
+    # Save training result
+    file_prefix = args.env + '_eps_rets_mean_buff'
 
     with open(file_prefix + '.pkl', 'wb+') as f:
         pickle.dump(eps_rets_mean_buff, f)

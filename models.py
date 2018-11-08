@@ -15,7 +15,7 @@ class Policy(nn.Module):
         self.l1 = nn.Linear(args.hid_size, args.hid_size)
         self.l_out = nn.Linear(args.hid_size, ac_space.shape[0])
 
-        self.std = nn.Parameter(torch.FloatTensor([[args.pol_init_std] * ac_space.shape[0]]))
+        self.std = nn.Parameter(torch.tensor([[args.pol_init_std] * ac_space.shape[0]], dtype=torch.float32))
 
         for name, c in self.named_children():
             if name == 'l_out':

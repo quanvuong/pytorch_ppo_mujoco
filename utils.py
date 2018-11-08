@@ -13,11 +13,11 @@ import gym
 def set_global_seeds(seed):
 
     torch.manual_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+
     if torch.cuda.is_available():
         torch.cuda.seed_all(seed)
-
-    np.random.seed(seed)
-    random.seed(0)
 
 
 def set_torch_num_threads():
@@ -29,13 +29,11 @@ def set_torch_num_threads():
         torch.set_num_threads(1)
 
 
-
 def get_args_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--env', default='InvertedPendulum-v2')
     parser.add_argument('--seed', default=0)
     parser.add_argument('--max-timesteps', type=int, default=int(1e6))
-    parser.add_argument('--timer-code', type=bool, default=False)
 
     parser.add_argument('--pol-fixed-std', type=bool, default=True)  # Fixed across action dimension
     parser.add_argument('--pol-init-std', type=float, default=1.0)
@@ -53,7 +51,6 @@ def get_args_parser():
     parser.add_argument('--lam', type=float, default=0.95)
 
     parser.add_argument('--render', type=bool, default=False)
-    parser.add_argument('--new-config', type=str, default='')
     return parser
 
 
@@ -82,7 +79,6 @@ def traj_seg_gen(env, pol, val, state_running_m_std, args):
     vpreds = np.zeros(args.ts_per_batch, 'float32')
     news = np.zeros(args.ts_per_batch, 'int32')
     acs = np.array([ac for _ in range(args.ts_per_batch)])
-    prevacs = acs.copy()
 
     while True:
         prevac = ac
@@ -99,7 +95,7 @@ def traj_seg_gen(env, pol, val, state_running_m_std, args):
         # terminal value
         if t > 0 and t % args.ts_per_batch == 0:
             yield {"obs": obs, "rews": rews, "vpreds": vpreds, "news": news,
-                   "acs": acs, "prevacs": prevacs, "nextvpred": vpred * (1 - new),
+                   "acs": acs, "nextvpred": vpred * (1 - new),
                    "ep_rets": ep_rets, "ep_lens": ep_lens}
             # Be careful!!! if you change the downstream algorithm to aggregate
             # several of these batches, then be sure to do a deepcopy
@@ -111,7 +107,6 @@ def traj_seg_gen(env, pol, val, state_running_m_std, args):
         vpreds[i] = vpred
         news[i] = new
         acs[i] = ac
-        prevacs[i] = prevac
 
         ob, rew, new, _ = env.step(ac)
         rews[i] = rew
