@@ -39,8 +39,6 @@ def main():
 
     num_train_iter = int(args.max_timesteps / args.ts_per_batch)
 
-    start = time.time()
-
     # Buffer for running statistics
     eps_rets_buff = deque(maxlen=100)
     eps_rets_mean_buff = []
@@ -56,7 +54,6 @@ def main():
                        iter_i, eps_rets_buff, eps_rets_mean_buff, seg_gen,
                        state_running_m_std,
                        args)
-        print(f'Taken: {round(time.time() - start, 3)} seconds so far')
         print()
 
     # Save training result
