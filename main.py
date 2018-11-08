@@ -6,7 +6,6 @@ from train import one_train_iter
 
 import torch.optim as optim
 
-import time
 from collections import deque
 import pickle
 
