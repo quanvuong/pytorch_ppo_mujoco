@@ -54,3 +54,4 @@ fabric.properties
 .idea/
 __pycache__/
 .DS_Store
+.ipynb_checkpoints/
