@@ -17,6 +17,8 @@ def main():
     set_torch_num_threads()
 
     args = get_args_parser().parse_args()
+
+    # Create environment and set global seeds
     env = make_mujoco_env(args.env, args.seed)
 
     print(f'args: {args}\n')
