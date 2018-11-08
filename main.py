@@ -1,3 +1,5 @@
+import os
+
 from utils import get_args_parser, make_mujoco_env, traj_seg_gen, RunningMeanStd, set_torch_num_threads
 from models import Policy, ValueNet
 from train import one_train_iter
@@ -58,7 +60,11 @@ def main():
         print()
 
     # Save training result
-    with open(f'{args.env}_seed_{args.seed}_avg_episode_returns_buffer.pkl', 'wb+') as f:
+    save_dir = f'res/{args.env}/seed_{args.seed}/avg_episode_returns_buffer.pkl'
+
+    os.makedirs(save_dir, exist_ok=True)
+
+    with open(save_dir, 'wb+') as f:
         pickle.dump(eps_rets_mean_buff, f)
 
 
