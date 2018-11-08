@@ -20,7 +20,7 @@ def update_params(m_b, pol, val, optims, args):
     ratio = pnew / pold
 
     surr1 = ratio * atargs
-    surr2 = torch.clamp(ratio, 1.0 - args.clip_param, 1.0 + args.clip_param) * atargs
+    surr2 = torch.clamp(ratio, 1.0 - args.clip_param_annealed, 1.0 + args.clip_param_annealed) * atargs
     pol_surr, _ = torch.min(torch.cat((surr1, surr2), dim=1), dim=1)
     pol_surr = - torch.sum(pol_surr) / obs.size()[0]
 
@@ -71,6 +71,8 @@ def one_train_iter(pol, old_pol, val, optims,
     # Anneal lr and clip param
     num_ts_so_far = iter_i * args.ts_per_batch
     lr_mult = max(1.0 - float(num_ts_so_far) / args.max_timesteps, 0)
+
+    args.clip_param_annealed = args.clip_param * lr_mult
 
     change_lr(optims['pol_optim'], args.optim_stepsize * lr_mult)
     change_lr(optims['val_optim'], args.optim_stepsize * lr_mult)
