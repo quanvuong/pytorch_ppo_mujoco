@@ -32,7 +32,7 @@ def set_torch_num_threads():
 def get_args_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--env', default='InvertedPendulum-v2')
-    parser.add_argument('--seed', default=0)
+    parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--max-timesteps', type=int, default=int(1e6))
 
     parser.add_argument('--pol-fixed-std', type=bool, default=True)  # Fixed across action dimension
