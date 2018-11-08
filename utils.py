@@ -46,6 +46,7 @@ def get_args_parser():
     parser.add_argument('--optim-stepsize', type=float, default=3e-4)
     parser.add_argument('--optim-batch-size', type=int, default=64)
 
+    # Parameter for GAE Advantage Estimate
     parser.add_argument('--gamma', type=float, default=0.99)
     parser.add_argument('--lam', type=float, default=0.95)
 
