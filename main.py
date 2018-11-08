@@ -58,9 +58,11 @@ def main():
         print()
 
     # Save training result
-    save_dir = f'res/{args.env}/seed_{args.seed}/avg_episode_returns_buffer.pkl'
+    save_dir = f'res/{args.env}/seed_{args.seed}'
 
     os.makedirs(save_dir, exist_ok=True)
+
+    save_dir = f'{save_dir}/avg_episode_returns_buffer.pkl'
 
     with open(save_dir, 'wb+') as f:
         pickle.dump(eps_rets_mean_buff, f)
