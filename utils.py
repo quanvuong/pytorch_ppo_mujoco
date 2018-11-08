@@ -35,7 +35,6 @@ def get_args_parser():
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--max-timesteps', type=int, default=int(1e6))
 
-    parser.add_argument('--pol-fixed-std', type=bool, default=True)  # Fixed across action dimension
     parser.add_argument('--pol-init-std', type=float, default=1.0)
 
     parser.add_argument('--hid-size', type=int, default=64)
