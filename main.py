@@ -8,7 +8,6 @@ import time
 from collections import deque
 import pickle
 
-import matplotlib.pyplot as plt
 from tqdm import trange
 
 
@@ -59,16 +58,8 @@ def main():
         print()
 
     # Save training result
-    file_prefix = args.env + '_eps_rets_mean_buff'
-
-    with open(file_prefix + '.pkl', 'wb+') as f:
+    with open(f'{args.env}_seed_{args.seed}_avg_episode_returns_buffer.pkl', 'wb+') as f:
         pickle.dump(eps_rets_mean_buff, f)
-
-        x = [i[0] for i in eps_rets_mean_buff]
-        y = [i[1] for i in eps_rets_mean_buff]
-
-        plt.plot(x, y)
-        plt.savefig(file_prefix + '.png')
 
 
 if __name__ == '__main__':
