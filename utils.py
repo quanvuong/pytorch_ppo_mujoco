@@ -207,3 +207,9 @@ class RunningMeanStd(object):
         self.var = new_var
         self.std = np.sqrt(np.maximum(new_var, 1e-2))
         self.count = new_count
+
+
+def change_lr(optim, new_lr):
+    assert new_lr > 0
+    for param_group in optim.param_groups:
+        param_group['lr'] = new_lr
