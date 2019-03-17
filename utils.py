@@ -55,7 +55,6 @@ def get_args_parser():
 
 
 def make_mujoco_env(env_id, seed):
-    set_global_seeds(seed)
     env = gym.make(env_id)
     env.seed(seed)
     return env

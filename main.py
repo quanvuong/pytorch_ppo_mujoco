@@ -1,6 +1,6 @@
 import os
 
-from utils import get_args_parser, make_mujoco_env, traj_seg_gen, RunningMeanStd, set_torch_num_threads
+from utils import get_args_parser, make_mujoco_env, traj_seg_gen, RunningMeanStd, set_torch_num_threads, set_global_seeds
 from models import Policy, ValueNet
 from train import one_train_iter
 
@@ -20,6 +20,7 @@ def main():
 
     # Create environment and set global seeds
     env = make_mujoco_env(args.env, args.seed)
+    set_global_seeds(args.seed)
 
     print(f'args: {args}\n')
 
