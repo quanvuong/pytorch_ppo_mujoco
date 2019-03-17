@@ -57,15 +57,12 @@ def add_vtarg_and_adv(seg, args):
     seg["tdlamrets"] = seg["advs"] + seg["vpreds"]
 
 
-def one_train_iter(pol, old_pol, val, optims,
+def one_train_iter(pol, val, optims,
                    iter_i, eps_rets_buff, eps_rets_mean_buff, seg_gen,
                    state_running_m_std,
                    args):
 
     num_ts_so_far = iter_i * args.ts_per_batch
-
-    # Sync params
-    old_pol.load_state_dict(pol.state_dict())
 
     # Obtain training batch
     seg = seg_gen.__next__()
@@ -77,7 +74,7 @@ def one_train_iter(pol, old_pol, val, optims,
     add_vtarg_and_adv(seg, args)
 
     seg['advs'] = (seg['advs'] - seg['advs'].mean()) / seg['advs'].std()
-    pold = old_pol.prob(FloatTensorFromNumpyVar(seg['obs']), FloatTensorFromNumpyVar(seg['acs']), args).data.numpy()
+    pold = pol.prob(FloatTensorFromNumpyVar(seg['obs']), FloatTensorFromNumpyVar(seg['acs']), args).data.numpy()
 
     batch = Dataset(dict(obs=seg['obs'], acs=seg['acs'], atargs=seg['advs'], vtargs=seg['tdlamrets'], pold=pold))
 

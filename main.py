@@ -27,12 +27,6 @@ def main():
     pol = Policy(env.observation_space, env.action_space, args)
     pol_optim = optim.Adam(pol.parameters(), lr=args.optim_stepsize, eps=args.adam_epsilon)
 
-    old_pol = Policy(env.observation_space, env.action_space, args)
-    old_pol.load_state_dict(pol.state_dict())
-    # Do not calculate grad with respect to param of old pol
-    for param in old_pol.parameters():
-        param.requires_grad = False
-
     val = ValueNet(env.observation_space, args)
     val_optim = optim.Adam(val.parameters(), lr=args.optim_stepsize, eps=args.adam_epsilon)
 
@@ -51,7 +45,7 @@ def main():
 
     for iter_i in trange(num_train_iter):
         print('\nStarting training iter', iter_i)
-        one_train_iter(pol, old_pol, val, optims,
+        one_train_iter(pol, val, optims,
                        iter_i, eps_rets_buff, eps_rets_mean_buff, seg_gen,
                        state_running_m_std,
                        args)
