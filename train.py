@@ -1,4 +1,3 @@
-from wrappers import FloatTensorFromNumpyVar
 from utils import Dataset
 
 import torch
@@ -9,7 +8,7 @@ import numpy as np
 def update_params(m_b, pol, val, optims, args):
 
     keys = ('obs', 'acs', 'vtargs', 'atargs', 'pold')
-    obs, acs, vtargs, atargs, pold = (FloatTensorFromNumpyVar(m_b[i]) for i in keys)
+    obs, acs, vtargs, atargs, pold = (torch.from_numpy(m_b[i]).float() for i in keys)
 
     vtargs = vtargs.view(-1, 1)
     atargs = atargs.view(-1, 1)
@@ -74,7 +73,9 @@ def one_train_iter(pol, val, optims,
     add_vtarg_and_adv(seg, args)
 
     seg['advs'] = (seg['advs'] - seg['advs'].mean()) / seg['advs'].std()
-    pold = pol.prob(FloatTensorFromNumpyVar(seg['obs']), FloatTensorFromNumpyVar(seg['acs']), args).data.numpy()
+    pold = pol.prob(torch.from_numpy(seg['obs']).float(),
+                    torch.from_numpy(seg['acs']).float(),
+                    args).data.numpy()
 
     batch = Dataset(dict(obs=seg['obs'], acs=seg['acs'], atargs=seg['advs'], vtargs=seg['tdlamrets'], pold=pold))
 

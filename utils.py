@@ -5,8 +5,6 @@ import torch
 import numpy as np
 import random
 
-from wrappers import FloatTensorFromNumpyVar, FloatTensorFromNumpy
-
 import gym
 
 
@@ -81,7 +79,7 @@ def traj_seg_gen(env, pol, val, state_running_m_std, args):
 
     while True:
         ob = np.clip((ob - state_running_m_std.mean) / state_running_m_std.std, -5.0, 5.0)
-        t_state = FloatTensorFromNumpyVar(np.expand_dims(ob, 0), requires_grad=False)
+        t_state = torch.from_numpy(np.expand_dims(ob, 0)).float()
 
         ac, _ = pol(t_state, args)
         ac = ac.data.numpy()
@@ -124,7 +122,7 @@ def weights_init(c, std):
     out = np.random.randn(c.out_features, c.in_features).astype(np.float32)
     out *= std / np.sqrt(np.square(out).sum(axis=0, keepdims=True))
 
-    c.weight.data.copy_(FloatTensorFromNumpy(out))
+    c.weight.data.copy_(torch.from_numpy(out).float())
     c.bias.data.fill_(0)
 
 
