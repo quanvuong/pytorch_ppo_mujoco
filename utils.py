@@ -81,7 +81,7 @@ def traj_seg_gen(env, pol, val, state_running_m_std, args):
         ob = np.clip((ob - state_running_m_std.mean) / state_running_m_std.std, -5.0, 5.0)
         t_state = torch.from_numpy(np.expand_dims(ob, 0)).float()
 
-        ac, _ = pol(t_state, args)
+        ac, _ = pol(t_state)
         ac = ac.data.numpy()
         vpred = val(t_state).data.numpy()
 

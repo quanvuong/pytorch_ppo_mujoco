@@ -23,7 +23,7 @@ class Policy(nn.Module):
             else:
                 weights_init(c, 1.0)
 
-    def forward(self, x, args):
+    def forward(self, x):
 
         x = torch.tanh(self.l_in(x))
         x = torch.tanh(self.l1(x))
@@ -33,9 +33,9 @@ class Policy(nn.Module):
 
         return ac, mean
 
-    def neglogp(self, states, acs, args):
+    def neglogp(self, states, acs):
 
-        _, mean = self.forward(states, args)
+        _, mean = self.forward(states)
 
         ac_size = acs.size()[-1]
 
@@ -43,11 +43,11 @@ class Policy(nn.Module):
                0.5 * np.log(2.0 * np.pi) * float(ac_size) + \
                torch.sum(torch.log(self.std), dim=-1)
 
-    def logp(self, state, ac, args):
-        return - self.neglogp(state, ac, args)
+    def logp(self, state, ac):
+        return - self.neglogp(state, ac)
 
-    def prob(self, state, ac, args):
-        return torch.exp(self.logp(state, ac, args))
+    def prob(self, state, ac):
+        return torch.exp(self.logp(state, ac))
 
 
 class ValueNet(nn.Module):

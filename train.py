@@ -14,7 +14,7 @@ def update_params(m_b, pol, val, optims, args):
     atargs = atargs.view(-1, 1)
 
     # Calculate policy surrogate objective
-    pnew = pol.prob(obs, acs, args)
+    pnew = pol.prob(obs, acs)
 
     ratio = pnew / pold
 
@@ -74,8 +74,7 @@ def one_train_iter(pol, val, optims,
 
     seg['advs'] = (seg['advs'] - seg['advs'].mean()) / seg['advs'].std()
     pold = pol.prob(torch.from_numpy(seg['obs']).float(),
-                    torch.from_numpy(seg['acs']).float(),
-                    args).data.numpy()
+                    torch.from_numpy(seg['acs']).float()).data.numpy()
 
     batch = Dataset(dict(obs=seg['obs'], acs=seg['acs'], atargs=seg['advs'], vtargs=seg['tdlamrets'], pold=pold))
 
