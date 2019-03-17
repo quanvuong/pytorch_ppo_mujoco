@@ -66,6 +66,9 @@ def one_train_iter(pol, val, optims,
     # Obtain training batch
     seg = seg_gen.__next__()
 
+    # Update running mean and std of states
+    state_running_m_std.update(seg['obs'])
+
     eps_rets_buff.extend(seg['ep_rets'])
     eps_rets_mean_buff.append((num_ts_so_far, np.mean(eps_rets_buff)))
     print('Last 100 episodes mean returns:', np.mean(eps_rets_buff))
@@ -82,5 +85,3 @@ def one_train_iter(pol, val, optims,
         for m_b in batch.iterate_once(args.optim_batch_size):
             update_params(m_b, pol, val, optims, args)
 
-    # Update running mean and std of states
-    state_running_m_std.update(seg['obs'])
