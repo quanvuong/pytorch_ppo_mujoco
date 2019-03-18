@@ -15,7 +15,7 @@ def set_global_seeds(seed):
     random.seed(seed)
 
     if torch.cuda.is_available():
-        torch.cuda.seed_all(seed)
+        torch.cuda.manual_seed_all(seed)
 
 
 def set_torch_num_threads():
