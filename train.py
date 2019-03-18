@@ -1,5 +1,6 @@
 from utils import Dataset
 
+from utils import change_lr
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -61,7 +62,12 @@ def one_train_iter(pol, val, optims,
                    state_running_m_std,
                    args):
 
+    # Anneal the learning rate
     num_ts_so_far = iter_i * args.ts_per_batch
+    lr_mult = max(1.0 - float(num_ts_so_far) / args.max_timesteps, 0)
+
+    change_lr(optims['pol_optim'], args.optim_stepsize * lr_mult)
+    change_lr(optims['val_optim'], args.optim_stepsize * lr_mult)
 
     # Obtain training batch
     seg = seg_gen.__next__()
